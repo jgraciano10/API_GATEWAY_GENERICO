@@ -39,16 +39,8 @@ public class UserService{
     }
 
     public void createUser(User user){
-        User user1 = new User();
-        user1.setUserName(user.getUserName());
-        user1.setEmail(user.getEmail());
-        user1.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        user1.setVerificationCode(user.getVerificationCode());
-        user1.setVerified(user.getVerfied());
-        user1.setRole(user.getRole());
         try {
-
-            userRepository.save(user1);
+            userRepository.save(user);
         } catch (Exception e) {
             System.out.println("Error al guardar el usuario: " + e.getMessage());
             throw e; // Vuelve a lanzar la excepción si es necesario
