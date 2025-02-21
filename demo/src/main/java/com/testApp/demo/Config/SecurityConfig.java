@@ -70,34 +70,7 @@ public class SecurityConfig {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 
-    /*@Bean
-    @Order(1)
-    public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http)
-            throws Exception {
-        OAuth2AuthorizationServerConfigurer authorizationServerConfigurer =
-                OAuth2AuthorizationServerConfigurer.authorizationServer();
 
-        http
-                .securityMatcher(authorizationServerConfigurer.getEndpointsMatcher())
-                .with(authorizationServerConfigurer, (authorizationServer) ->
-                        authorizationServer
-                                .oidc(Customizer.withDefaults())	// Enable OpenID Connect 1.0
-                )
-                .authorizeHttpRequests((authorize) ->
-                        authorize
-                                .anyRequest().permitAll()
-                )
-
-                .exceptionHandling((e) -> e
-                        .defaultAuthenticationEntryPointFor(
-                                new LoginUrlAuthenticationEntryPoint(LOGIN_RESOURCE),
-                                new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
-                        )
-                );
-
-        return http.build();
-    }
-*/
 
     @Bean
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http)
@@ -105,12 +78,11 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers(HttpMethod.POST, "/create-user/**", "/login/**")
+                        .requestMatchers(HttpMethod.POST,"/login", "/create-user/**")
                         .permitAll()
                         .anyRequest().authenticated()
+
                 )
-                // Form login handles the redirect to the login page from the
-                // authorization server filter chain
                 .httpBasic(form -> Customizer.withDefaults())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
@@ -118,26 +90,6 @@ public class SecurityConfig {
         return http.build();
     }
 
-
-    /*
-    @Bean
-    public RegisteredClientRepository registeredClientRepository(BCryptPasswordEncoder encoder) {
-        RegisteredClient oidcClient = RegisteredClient.withId(UUID.randomUUID().toString())
-                .clientId("oidc-client")
-                .clientSecret(encoder.encode("secret"))
-                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
-                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-                .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-                .scope(OidcScopes.PROFILE)
-                .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
-                .redirectUri("/login")
-                .build();
-
-        return new InMemoryRegisteredClientRepository(oidcClient);
-
-    }
-
-     */
     @Bean
     public JWKSource<SecurityContext> jwkSource() {
         RSAKey rsaKey = generateKeys();

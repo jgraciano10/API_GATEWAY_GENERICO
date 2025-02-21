@@ -2,14 +2,14 @@ package com.testApp.demo.Controller;
 
 import com.testApp.demo.Model.User;
 import com.testApp.demo.Service.UserService;
+import com.testApp.demo.Utils.LoginRequest;
+import com.testApp.demo.Utils.LoginResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.sql.SQLOutput;
 import java.util.List;
 
 @RestController
@@ -20,7 +20,6 @@ public class UserController {
 
 
     @GetMapping("/get-all-users")
-
 
     public List<User> getAllUsers(){
         return userService.getAllUsers();
@@ -35,9 +34,9 @@ public class UserController {
 
     @PostMapping("/login")
 
-    public String login(@RequestBody User user){
+    public LoginResponse login(@RequestBody LoginRequest loginRequest){
 
-        return userService.verify(user);
+        return userService.verify(loginRequest);
     }
 
 

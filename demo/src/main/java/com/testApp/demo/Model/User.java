@@ -27,6 +27,9 @@ public class User {
     @Column(nullable = false)
     private Role role;
 
+    @Transient
+    private String jwt;
+
     public String getEmail() {
         return email;
     }
@@ -69,6 +72,10 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public void setJwt(String jwt) {
+        this.jwt = jwt;
     }
 
 

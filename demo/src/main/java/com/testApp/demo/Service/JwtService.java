@@ -17,15 +17,14 @@ import java.util.function.Function;
 @Component
 public class JwtService {
 
-    private String secretKey= null;
-    public String generateToken(User user) {
-        Map<String, Object> claims
-                = new HashMap<>();
+    private String secretKey= "asfsdfdnfbdbczjdkncjdnjdnjvnzñcz44646zd161sdcshcasgx";
+    public String generateToken(UserDetails userDetails) {
+        Map<String, Object> claims = new HashMap<>();
         return Jwts
                 .builder()
                 .claims()
                 .add(claims)
-                .subject(user.getUserName())
+                .subject(userDetails.getUsername())
                 .issuer("DCB")
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + 60*10*1000))
@@ -39,8 +38,8 @@ public class JwtService {
                 =Decoders.BASE64.decode(getSecretKey());
         return Keys.hmacShaKeyFor(decode);
     }
-    public String getSecretKey(){
-        return secretKey = "kHVoYggQYWCI8S30i5fc2jlHCcAoII3MUrR9DSlRRy5Uzq1nO53DwlS7ccRLCyqv";
+    private String getSecretKey(){
+        return "kHVoYggQYWCI8S30i5fc2jlHCcAoII3MUrR9DSlRRy5Uzq1nO53DwlS7ccRLCyqv";
 
     }
 
@@ -50,6 +49,7 @@ public class JwtService {
      public Date extractExpiration(String jwt) {
          return extractClaims(jwt, Claims::getExpiration);
      }
+
     private <T>T extractClaims(String jwt, Function<Claims, T> claimResolver) {
         Claims claims = extractClaims(jwt);
         return claimResolver.apply(claims);
