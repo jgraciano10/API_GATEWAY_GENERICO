@@ -1,6 +1,5 @@
-package com.testApp.demo.Utils;
+package com.testApp.demo.Domain.Models.In;
 
-import com.testApp.demo.Model.Role;
 import lombok.Data;
 
 @Data

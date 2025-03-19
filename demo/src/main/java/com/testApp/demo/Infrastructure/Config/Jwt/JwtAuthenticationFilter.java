@@ -1,6 +1,6 @@
-package com.testApp.demo.Config;
+package com.testApp.demo.Infrastructure.Config.Jwt;
 
-import com.testApp.demo.Service.JwtService;
+import com.testApp.demo.Infrastructure.Config.Jwt.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -34,13 +34,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
-        String requestPath = request.getRequestURI();
 
-
-        if (requestPath.equals("/login") || requestPath.equals("/create-user")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
         final String authHeader = request.getHeader("Authorization");
 
 
@@ -50,14 +44,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         final String jwt = authHeader.substring(7);
-        final String userName = jwtService.extractUserName(jwt);
+        final String email = jwtService.extractEmail(jwt);
 
         Authentication authentication
                 = SecurityContextHolder.getContext().getAuthentication();
 
-        if(userName!=null && authentication==null){
+        if(email!=null && authentication==null){
             UserDetails userDetails
-                    = userDetailsService.loadUserByUsername(userName);
+                    = userDetailsService.loadUserByUsername(email);
 
             if(jwtService.isTokenValid(jwt,userDetails)){
                 UsernamePasswordAuthenticationToken authenticationToken

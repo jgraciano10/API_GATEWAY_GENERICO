@@ -1,5 +1,6 @@
-package com.testApp.demo.Model;
+package com.testApp.demo.Infrastructure.Config.AuthModels;
 
+import com.testApp.demo.Infrastructure.Repositories.Entities.UserEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,25 +10,25 @@ import java.util.Collections;
 
 public class CustomUserDetails implements UserDetails {
 
-    private final User user;
+    private final UserEntity userEntity;
 
-    public CustomUserDetails(User user) {
-        this.user = user;
+    public CustomUserDetails(UserEntity userEntity) {
+        this.userEntity = userEntity;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority(user.getRole().toString()));
+        return Collections.singleton(new SimpleGrantedAuthority(userEntity.getRole().toString()));
     }
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return userEntity.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return user.getUserName();
+        return userEntity.getEmail();
     }
 
     @Override

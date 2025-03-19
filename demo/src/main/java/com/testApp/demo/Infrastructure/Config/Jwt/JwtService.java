@@ -1,6 +1,7 @@
-package com.testApp.demo.Service;
+package com.testApp.demo.Infrastructure.Config.Jwt;
 
-import com.testApp.demo.Model.User;
+import com.testApp.demo.Domain.Models.In.User;
+import com.testApp.demo.Infrastructure.Repositories.Entities.UserEntity;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -18,13 +19,28 @@ import java.util.function.Function;
 public class JwtService {
 
     private String secretKey= "asfsdfdnfbdbczjdkncjdnjdnjvnzñcz44646zd161sdcshcasgx";
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(User user) {
         Map<String, Object> claims = new HashMap<>();
         return Jwts
                 .builder()
                 .claims()
                 .add(claims)
-                .subject(userDetails.getUsername())
+                .subject(user.getEmail())
+                .issuer("DCB")
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .expiration(new Date(System.currentTimeMillis() + 60*10*1000))
+                .and()
+                .signWith(generateKey()) 
+                .compact();
+    }
+
+    public String generateToken(String email) {
+        Map<String, Object> claims = new HashMap<>();
+        return Jwts
+                .builder()
+                .claims()
+                .add(claims)
+                .subject(email)
                 .issuer("DCB")
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + 60*10*1000))
@@ -43,7 +59,7 @@ public class JwtService {
 
     }
 
-    public String extractUserName(String jwt) {
+    public String extractEmail(String jwt) {
         return extractClaims(jwt, Claims::getSubject);
     }
      public Date extractExpiration(String jwt) {
@@ -65,7 +81,7 @@ public class JwtService {
     }
 
     public boolean isTokenValid(String jwt, UserDetails userDetails) {
-        final String userName = extractUserName(jwt);
+        final String userName = extractEmail(jwt);
 
         return (userName.equals(userDetails.getUsername()) && !isTokenExpired(jwt));
     }
