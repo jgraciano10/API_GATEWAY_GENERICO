@@ -1,5 +1,6 @@
-package com.testApp.demo.Model;
+package com.testApp.demo.Infrastructure.Repositories.Entities;
 
+import com.testApp.demo.Domain.Models.In.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -7,13 +8,13 @@ import lombok.*;
 @NoArgsConstructor
 @Table(name = "users")
 
-public class User {
+public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(name = "user_name")
-    private String userName;
+    @Column(name = "name")
+    private String name;
     @Column(name = "email")
     private String email;
     @Column(name = "password")
@@ -27,6 +28,9 @@ public class User {
     @Column(nullable = false)
     private Role role;
 
+    @Transient
+    private String jwt;
+
     public String getEmail() {
         return email;
     }
@@ -34,11 +38,11 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
-    public String getUserName() {
-        return userName;
+    public String getName() {
+        return name;
     }
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPassword() {
@@ -69,6 +73,10 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public void setJwt(String jwt) {
+        this.jwt = jwt;
     }
 
 
